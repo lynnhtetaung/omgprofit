@@ -8,85 +8,120 @@
         /* --- Forex Dark Theme Styles --- */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            padding: 20px; 
-            background: #1e1e2d; /* Dark Blue/Purple Background */
-            color: #dcdcdc; /* Light Grey Text */
+            padding: 10px; 
+            background: #1e1e2d; 
+            color: #dcdcdc; 
             min-height: 100vh;
         }
         h1 {
             color: #ffffff;
             font-weight: 300;
+            font-size: 1.5em; 
+        }
+        /* Table Container for Horizontal Scroll on Mobile/Wide Tables */
+        .table-container {
+            overflow-x: auto;
+            max-width: 100%;
+            margin: 0 auto;
         }
         table { 
             border-collapse: collapse; 
             width: 100%; 
-            max-width: 1400px; /* Wider for more columns */
+            min-width: 950px; /* Ensures horizontal scroll if viewport is smaller */
+            max-width: 1400px; 
             margin: 20px auto; 
-            background: #27293d; /* Slightly Lighter Table Background */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Deep Shadow */
+            background: #27293d; 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); 
             table-layout: fixed;
             border-radius: 8px;
-            overflow: hidden; /* For rounded corners */
+            overflow: hidden; 
         }
         th, td { 
-            border: 1px solid #3c3f58; /* Subtle Divider */
-            padding: 12px 8px; /* More padding */
+            border: 1px solid #3c3f58; 
+            padding: 8px 4px; 
             text-align: center; 
-            color: inherit; /* Inherit light grey text */
-            font-size: 0.95em;
+            color: inherit; 
+            font-size: 0.8em; 
         }
         th { 
-            background-color: #2c7be5; /* Vibrant Blue Header */
+            background-color: #2c7be5; 
             color: white; 
             font-weight: 600;
             text-transform: uppercase;
         }
-        tr:nth-child(even) {background-color: #2b2e40;} /* Alternate Row Shading */
+        tr:nth-child(even) {background-color: #2b2e40;} 
         
         /* Status Badge Styles */
         .status-badge {
             display: inline-block;
-            padding: 5px 12px;
+            padding: 4px 8px; 
             border-radius: 4px;
-            font-size: 0.85em;
+            font-size: 0.8em;
             font-weight: bold;
             color: white;
             text-transform: uppercase;
         }
-        .status-buy { background-color: #00b050; /* Strong Green */ }
-        .status-sell { background-color: #ff3366; /* Strong Red/Pink */ }
-        .status-hold { background-color: #ff9800; /* Amber */ }
-        .status-default { background-color: #5a5a5a; } /* Dark Grey */
+        .status-buy { background-color: #00b050; } 
+        .status-sell { background-color: #ff3366; } 
+        .status-hold { background-color: #ff9800; } 
+        .status-default { background-color: #5a5a5a; } 
 
         /* Filter Styles */
         #filter-container {
             text-align: center;
-            margin: 20px auto;
-            max-width: 1400px;
+            margin: 20px auto 10px auto; /* Reduced bottom margin */
+            max-width: 1400px; 
         }
         .filter-button {
-            padding: 10px 15px;
-            margin: 0 4px 10px 4px;
+            padding: 8px 10px; 
+            margin: 0 3px 6px 3px;
             border: none;
-            background-color: #3f425c; /* Dark button base */
+            background-color: #3f425c; 
             color: #dcdcdc;
             cursor: pointer;
             border-radius: 4px;
-            transition: background-color 0.2s, color 0.2s;
-        }
-        .filter-button:hover {
-            background-color: #555870;
+            font-size: 0.8em;
         }
         .filter-button.active {
-            background-color: #2c7be5; /* Active Blue */
+            background-color: #2c7be5; 
             color: white;
             box-shadow: 0 0 8px rgba(44, 123, 229, 0.6);
             font-weight: bold;
         }
         
+        /* Timeframe Key Styles */
+        #timeframe-key {
+            text-align: center;
+            font-size: 0.85em;
+            color: #9a9a9a;
+            margin-bottom: 20px;
+        }
+        
         /* Utility class to hide columns */
         .hidden-col {
             display: none;
+        }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 650px) {
+            body { padding: 10px; }
+            h1 { font-size: 1.2em; margin-top: 10px; }
+            
+            /* Make filter buttons wrap nicely */
+            #filter-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .filter-button {
+                flex-grow: 1; 
+                max-width: 20%; 
+                margin: 3px;
+            }
+            #timeframe-key {
+                padding: 0 10px;
+                text-align: left; /* Use left alignment on mobile for better wrapping */
+            }
         }
     </style>
 </head>
@@ -94,61 +129,88 @@
     <h1 style="text-align:center;">OMG Profit Currency Signals</h1>
     
     <div id="filter-container">
-        <button class="filter-button active" data-timeframe="all">All Timeframes</button>
-        <button class="filter-button" data-timeframe="Monthly">Monthly</button>
-        <button class="filter-button" data-timeframe="Weekly">Weekly</button>
-        <button class="filter-button" data-timeframe="Daily">Daily</button>
-        <button class="filter-button" data-timeframe="12-Hourly">12H</button>
-        <button class="filter-button" data-timeframe="8-Hourly">8H</button>
-        <button class="filter-button" data-timeframe="6-Hourly">6H</button>
-        <button class="filter-button" data-timeframe="4-Hourly">4H</button>
+        <button class="filter-button active" data-timeframe="all">ALL</button>
+        <button class="filter-button" data-timeframe="1-Hourly">1H</button>
+        <button class="filter-button" data-timeframe="2-Hourly">2H</button>
         <button class="filter-button" data-timeframe="3-Hourly">3H</button>
+        <button class="filter-button" data-timeframe="4-Hourly">4H</button>
+        <button class="filter-button" data-timeframe="6-Hourly">6H</button>
+        <button class="filter-button" data-timeframe="8-Hourly">8H</button>
+        <button class="filter-button" data-timeframe="12-Hourly">12H</button>
+        <button class="filter-button" data-timeframe="Daily">D</button>
+        <button class="filter-button" data-timeframe="Weekly">W</button>
+        <button class="filter-button" data-timeframe="Monthly">M</button>
     </div>
 
-    <table id="currency-table">
-        <thead>
-            <tr>
-                <th data-column="Currency">Currency</th>
-                <th data-column="Monthly">Monthly</th>
-                <th data-column="Weekly">Weekly</th>
-                <th data-column="Daily">Daily</th>
-                <th data-column="12-Hourly">12H</th>
-                <th data-column="8-Hourly">8H</th>
-                <th data-column="6-Hourly">6H</th>
-                <th data-column="4-Hourly">4H</th>
-                <th data-column="3-Hourly">3H</th>
-                <th data-column="Status" data-is-static="true">Overall Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td colspan="10" class="loading">Initializing...</td></tr> </tbody>
-    </table>
+    <div id="timeframe-key">
+        1H = 1-Hourly, D = Daily, W = Weekly, M = Monthly.
+        (Other labels like 2H, 3H, etc., stand for their respective hours)
+    </div>
+    <div class="table-container">
+        <table id="currency-table">
+            <thead>
+                <tr>
+                    <th data-column="Currency">Currency</th>
+                    <th data-column="1-Hourly">1H</th>
+                    <th data-column="2-Hourly">2H</th>
+                    <th data-column="3-Hourly">3H</th>
+                    <th data-column="4-Hourly">4H</th>
+                    <th data-column="6-Hourly">6H</th>
+                    <th data-column="8-Hourly">8H</th>
+                    <th data-column="12-Hourly">12H</th>
+                    <th data-column="Daily">D</th>
+                    <th data-column="Weekly">W</th>
+                    <th data-column="Monthly">M</th>
+                    <th data-column="Status" data-is-static="true">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td colspan="12" class="loading">Initializing...</td></tr> 
+            </tbody>
+        </table>
+    </div>
 
     <script>
+        // --- Configuration ---
+        const USE_LIVE_PROXY = true; // <<< REMAINS TRUE FOR LIVE DATA
         const CSV_PROXY_URL = "/.netlify/functions/fetch-csv"; 
         const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
         
-        // Define ALL available columns and their index in the CSV
+        // Define ALL available columns and their index in the CSV (MUST MATCH 12 COLUMNS)
         const TIME_FRAME_COLUMNS = [
             { name: "Currency", index: 0, filterable: false },
-            { name: "Monthly", index: 1, filterable: true },
-            { name: "Weekly", index: 2, filterable: true },
-            { name: "Daily", index: 3, filterable: true },
-            { name: "12-Hourly", index: 4, filterable: true },
-            { name: "8-Hourly", index: 5, filterable: true },
-            { name: "6-Hourly", index: 6, filterable: true },
-            { name: "4-Hourly", index: 7, filterable: true },
-            { name: "3-Hourly", index: 8, filterable: true },
-            { name: "Status", index: 9, filterable: false }
+            { name: "1-Hourly", index: 1, filterable: true },
+            { name: "2-Hourly", index: 2, filterable: true },
+            { name: "3-Hourly", index: 3, filterable: true },
+            { name: "4-Hourly", index: 4, filterable: true },
+            { name: "6-Hourly", index: 5, filterable: true },
+            { name: "8-Hourly", index: 6, filterable: true },
+            { name: "12-Hourly", index: 7, filterable: true },
+            { name: "Daily", index: 8, filterable: true },
+            { name: "Weekly", index: 9, filterable: true },
+            { name: "Monthly", index: 10, filterable: true },
+            { name: "Status", index: 11, filterable: false }
         ];
-        const EXPECTED_COLUMNS = TIME_FRAME_COLUMNS.length; // Now 10
+        const EXPECTED_COLUMNS = TIME_FRAME_COLUMNS.length; // Now 12
         const STATUS_COLUMN_INDEX = TIME_FRAME_COLUMNS.findIndex(col => col.name === "Status");
         
         let activeTimeframe = 'all'; 
-
-        // --- Data Fetching and Parsing (Same as before) ---
-
-        async function fetchCSV() {
+        
+        // --- MOCK DATA (BYPASSED) ---
+        function fetchMockCSV() {
+            const mockData = 
+`Currency,1-Hourly,2-Hourly,3-Hourly,4-Hourly,6-Hourly,8-Hourly,12-Hourly,Daily,Weekly,Monthly,Overall Status
+EURUSD,BUY,HOLD,BUY,SELL,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD
+GBPUSD,SELL,BUY,HOLD,BUY,SELL,HOLD,BUY,BUY,BUY,SELL,BUY
+USDJPY,HOLD,SELL,BUY,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD,SELL
+AUDCAD,BUY,HOLD,SELL,BUY,HOLD,SELL,BUY,BUY,HOLD,SELL,BUY
+EURGBP,SELL,BUY,HOLD,SELL,BUY,HOLD,SELL,HOLD,BUY,SELL,HOLD`;
+            
+            return Promise.resolve(mockData);
+        }
+        
+        // --- LIVE DATA FETCH (ACTIVE) ---
+        async function fetchLiveCSV() {
             try {
                 const response = await fetch(CSV_PROXY_URL);
                 
@@ -165,14 +227,23 @@
                 return "";
             }
         }
+        
+        // --- Main Fetch Function ---
+        async function fetchCSV() {
+            if (USE_LIVE_PROXY) {
+                return fetchLiveCSV();
+            } else {
+                return fetchMockCSV();
+            }
+        }
+
+        // --- Parsing and Rendering Logic ---
 
         function parseCSV(csvText) {
             const rows = csvText.trim().split(/\r?\n/);
             return rows.map(row => row.split(","));
         }
 
-        // --- Rendering Logic ---
-        
         function getStatusClass(status) {
             const cleanedStatus = status.trim().toLowerCase();
             if (cleanedStatus.includes('buy')) return 'status-buy';
@@ -189,7 +260,7 @@
             // 1. Update Header Visibility (<th>)
             headers.forEach(header => {
                 const colName = header.getAttribute('data-column');
-                const isStatic = header.getAttribute('data-is-static') === 'true'; 
+                const isStatic = colName === 'Currency' || colName === 'Status';
                 
                 if (timeframe === 'all' || isStatic || colName === timeframe) {
                     header.classList.remove('hidden-col');
@@ -216,7 +287,7 @@
                     });
                 } else if (cells.length === 1 && cells[0].hasAttribute('colspan')) {
                     // Handle loading/error row: update colspan
-                    const visibleCols = timeframe === 'all' ? EXPECTED_COLUMNS : 3; // Currency, Status, and one timeframe
+                    const visibleCols = timeframe === 'all' ? EXPECTED_COLUMNS : 3;
                     cells[0].setAttribute('colspan', visibleCols); 
                 }
             });
@@ -263,12 +334,10 @@
                 tbody.appendChild(tr);
             });
             
-            // Apply the current filter to the newly rendered table
             applyFilter(activeTimeframe);
             
-            // Update last updated timestamp
             const now = new Date().toLocaleTimeString();
-            const captionText = `Last Updated: ${now} JST`; // Added JST for clarity
+            const captionText = `Last Updated: ${now} JST`;
             let caption = document.querySelector("#currency-table caption");
             if (!caption) {
                 caption = document.createElement("caption");
@@ -298,18 +367,24 @@
         
         function initFilters() {
             const filterContainer = document.getElementById('filter-container');
-            filterContainer.addEventListener('click', (event) => {
-                if (event.target.classList.contains('filter-button')) {
-                    const timeframe = event.target.getAttribute('data-timeframe');
-                    applyFilter(timeframe);
-                }
-            });
+            if (filterContainer) {
+                filterContainer.addEventListener('click', (event) => {
+                    if (event.target.classList.contains('filter-button')) {
+                        const timeframe = event.target.getAttribute('data-timeframe');
+                        applyFilter(timeframe);
+                    }
+                });
+            }
         }
         
         // Initial setup
         initFilters();
         updateTable();
-        setInterval(updateTable, REFRESH_INTERVAL);
+        
+        // Set the auto-refresh interval when using live data
+        if (USE_LIVE_PROXY) {
+            setInterval(updateTable, REFRESH_INTERVAL);
+        }
     </script>
 </body>
 </html>
