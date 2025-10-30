@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Signals Dashboard</title>
+    <style>
+        /* Existing CSS for styling the table */
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        table { border-collapse: collapse; width: 100%; max-width: 1000px; margin: auto; background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #4CAF50; color: white; }
+        tr:nth-child(even) {background-color: #f2f2f2;}
+        .loading { text-align: center; padding: 20px; font-style: italic; color: #666; }
+        caption { margin-top: 10px; font-size: 0.9em; color: #555; }
+    </style>
+</head>
+<body>
+    <h1 style="text-align:center;">Currency Signals Dashboard</h1>
+    <table id="currency-table">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Monthly</th>
+                <th>Weekly</th>
+                <th>Daily</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td colspan="5" class="loading">Initializing...</td></tr>
+        </tbody>
+    </table>
+
+    <script>
+        // *** NEW: This URL points to your public Netlify Function endpoint. ***
+        // The Netlify Function will handle calling your secret Google Sheets URL.
+        const CSV_PROXY_URL = "/.netlify/functions/fetch-csv"; 
+        
+        const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+        async function fetchCSV() {
+            try {
+                // Call the secure proxy function instead of the direct CSV link
+                const response = await fetch(CSV_PROXY_URL);
+                
+                if (!response.ok) {
+                    const errorBody = await response.json().catch(() => ({ error: 'Unknown server error.' }));
+                    throw new Error(`Proxy error: ${response.status} - ${errorBody.error}`);
+                }
+                
+                const text = await response.text();
+                return text;
+            } catch (err) {
+                console.error("Error fetching data from proxy:", err.message);
+                document.querySelector("#currency-table tbody").innerHTML = 
+                    `<tr><td colspan="5" style="color:red;">Error loading data: ${err.message}</td></tr>`;
+                return "";
+            }
+        }
+
+        function parseCSV(csvText) {
+            // Simple parsing assuming no commas within data cells
+            const rows = csvText.trim().split(/\r?\n/);
+            return rows.map(row => row.split(","));
+        }
+
+        function renderTable(data) {
+            const tbody = document.querySelector("#currency-table tbody");
+            tbody.innerHTML = "";
+            
+            data.forEach((row, index) => {
+                if (index === 0) return; // Skip header row
+                
+                // Expecting 5 columns (Symbol, Monthly, Weekly, Daily, Status)
+                if (row.length < 5) { 
+                    console.warn(`Skipping malformed row: ${row.join(',')}`);
+                    return; 
+                }
+
+                const tr = document.createElement("tr");
+                // Only render the first 5 columns if more are present
+                row.slice(0, 5).forEach(cell => { 
+                    const td = document.createElement("td");
+                    td.textContent = cell.trim();
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            
+            // Update last updated timestamp
+            const now = new Date().toLocaleTimeString();
+            const captionText = `Last Updated: ${now}`;
+            let caption = document.querySelector("#currency-table caption");
+            if (!caption) {
+                caption = document.createElement("caption");
+                document.getElementById("currency-table").appendChild(caption);
+            }
+            caption.textContent = captionText;
+        }
+
+        async function updateTable() {
+            document.querySelector("#currency-table tbody").innerHTML = 
+                '<tr><td colspan="5" class="loading">Fetching and processing data...</td></tr>';
+            
+            const csvText = await fetchCSV();
+            
+            if (csvText) {
+                const data = parseCSV(csvText);
+                if (data.length > 1) { 
+                    renderTable(data);
+                } else {
+                    document.querySelector("#currency-table tbody").innerHTML = 
+                        '<tr><td colspan="5" style="color:#FFC300;">Data is empty or incorrectly formatted.</td></tr>';
+                }
+            }
+        }
+
+        // Initial load and auto-refresh setup
+        updateTable();
+        setInterval(updateTable, REFRESH_INTERVAL);
+    </script>
+</body>
+</html>

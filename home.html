@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Signals Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 1000px;
+            margin: auto;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {background-color: #f2f2f2;}
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align:center;">Currency Signals Dashboard</h1>
+    <table id="currency-table">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Monthly</th>
+                <th>Weekly</th>
+                <th>Daily</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td colspan="5" class="loading">Loading data...</td></tr>
+        </tbody>
+    </table>
+
+    <script>
+        // *** 1. REPLACE THIS WITH YOUR PUBLISHED CSV URL ***
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQQ6RKy4769gS8BRC0D4FxHKnrwNc30wCwkt-kicFmh-lJazZ8_PtWCNZAN_rQhQMbbU_qOTX_Ce-bu/pub?gid=121097005&single=true&output=csv"; 
+        
+        const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+        async function fetchCSV() {
+            try {
+                const response = await fetch(CSV_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const text = await response.text();
+                return text;
+            } catch (err) {
+                console.error("Error fetching CSV:", err);
+                document.querySelector("#currency-table tbody").innerHTML = 
+                    '<tr><td colspan="5" style="color:red;">Error loading data. Check console for details.</td></tr>';
+                return "";
+            }
+        }
+
+        function parseCSV(csvText) {
+            // Trim to remove leading/trailing whitespace, then split by line
+            const rows = csvText.trim().split(/\r?\n/);
+            
+            // Split each row by comma, allowing for simple CSV structure
+            return rows.map(row => row.split(","));
+        }
+
+        function renderTable(data) {
+            const tbody = document.querySelector("#currency-table tbody");
+            tbody.innerHTML = "";
+            
+            data.forEach((row, index) => {
+                // Assuming the first row is the header, which is already in <thead>
+                if (index === 0) return; 
+
+                // Ensure the row has the expected number of columns (e.g., 5)
+                if (row.length !== 5) { 
+                    console.warn(`Skipping malformed row: ${row.join(',')}`);
+                    return; 
+                }
+
+                const tr = document.createElement("tr");
+                row.forEach(cell => {
+                    const td = document.createElement("td");
+                    td.textContent = cell.trim(); // Trim whitespace from data cells
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            
+            // Add a timestamp to confirm refresh (optional)
+            if (data.length > 1) {
+                const now = new Date().toLocaleTimeString();
+                const caption = document.createElement("caption");
+                caption.textContent = `Last Updated: ${now}`;
+                const existingCaption = document.querySelector("#currency-table caption");
+                if (existingCaption) {
+                    existingCaption.remove();
+                }
+                document.getElementById("currency-table").appendChild(caption);
+            }
+        }
+
+        async function updateTable() {
+            // Show loading message while fetching
+            document.querySelector("#currency-table tbody").innerHTML = 
+                '<tr><td colspan="5" class="loading">Loading data...</td></tr>';
+            
+            const csvText = await fetchCSV();
+            
+            if (csvText) {
+                const data = parseCSV(csvText);
+                // Ensure there is actual data beyond just the header
+                if (data.length > 1) { 
+                    renderTable(data);
+                } else {
+                    document.querySelector("#currency-table tbody").innerHTML = 
+                        '<tr><td colspan="5" style="color:#FFC300;">CSV file is empty or malformed.</td></tr>';
+                }
+            }
+        }
+
+        // Initial load
+        updateTable();
+
+        // Auto-refresh every REFRESH_INTERVAL
+        setInterval(updateTable, REFRESH_INTERVAL);
+    </script>
+</body>
+</html>
