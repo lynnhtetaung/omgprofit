@@ -5,66 +5,232 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Currency Signals Dashboard</title>
     <style>
-        /* Existing CSS for styling the table */
-        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
-        table { border-collapse: collapse; width: 100%; max-width: 1000px; margin: auto; background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-        th { background-color: #4CAF50; color: white; }
-        tr:nth-child(even) {background-color: #f2f2f2;}
-        .loading { text-align: center; padding: 20px; font-style: italic; color: #666; }
-        caption { margin-top: 10px; font-size: 0.9em; color: #555; }
+        /* --- Forex Dark Theme Styles --- */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            background: #1e1e2d; /* Dark Blue/Purple Background */
+            color: #dcdcdc; /* Light Grey Text */
+            min-height: 100vh;
+        }
+        h1 {
+            color: #ffffff;
+            font-weight: 300;
+        }
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            max-width: 1400px; /* Wider for more columns */
+            margin: 20px auto; 
+            background: #27293d; /* Slightly Lighter Table Background */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Deep Shadow */
+            table-layout: fixed;
+            border-radius: 8px;
+            overflow: hidden; /* For rounded corners */
+        }
+        th, td { 
+            border: 1px solid #3c3f58; /* Subtle Divider */
+            padding: 12px 8px; /* More padding */
+            text-align: center; 
+            color: inherit; /* Inherit light grey text */
+            font-size: 0.95em;
+        }
+        th { 
+            background-color: #2c7be5; /* Vibrant Blue Header */
+            color: white; 
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        tr:nth-child(even) {background-color: #2b2e40;} /* Alternate Row Shading */
+        
+        /* Status Badge Styles */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+        }
+        .status-buy { background-color: #00b050; /* Strong Green */ }
+        .status-sell { background-color: #ff3366; /* Strong Red/Pink */ }
+        .status-hold { background-color: #ff9800; /* Amber */ }
+        .status-default { background-color: #5a5a5a; } /* Dark Grey */
+
+        /* Filter Styles */
+        #filter-container {
+            text-align: center;
+            margin: 20px auto;
+            max-width: 1400px;
+        }
+        .filter-button {
+            padding: 10px 15px;
+            margin: 0 4px 10px 4px;
+            border: none;
+            background-color: #3f425c; /* Dark button base */
+            color: #dcdcdc;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .filter-button:hover {
+            background-color: #555870;
+        }
+        .filter-button.active {
+            background-color: #2c7be5; /* Active Blue */
+            color: white;
+            box-shadow: 0 0 8px rgba(44, 123, 229, 0.6);
+            font-weight: bold;
+        }
+        
+        /* Utility class to hide columns */
+        .hidden-col {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <h1 style="text-align:center;">Currency Signals Dashboard</h1>
+    <h1 style="text-align:center;">OMG Profit Currency Signals</h1>
+    
+    <div id="filter-container">
+        <button class="filter-button active" data-timeframe="all">All Timeframes</button>
+        <button class="filter-button" data-timeframe="Monthly">Monthly</button>
+        <button class="filter-button" data-timeframe="Weekly">Weekly</button>
+        <button class="filter-button" data-timeframe="Daily">Daily</button>
+        <button class="filter-button" data-timeframe="12-Hourly">12H</button>
+        <button class="filter-button" data-timeframe="8-Hourly">8H</button>
+        <button class="filter-button" data-timeframe="6-Hourly">6H</button>
+        <button class="filter-button" data-timeframe="4-Hourly">4H</button>
+        <button class="filter-button" data-timeframe="3-Hourly">3H</button>
+    </div>
+
     <table id="currency-table">
         <thead>
             <tr>
-                <th>Symbol</th>
-                <th>Monthly</th>
-                <th>Weekly</th>
-                <th>Daily</th>
-                <th>Status</th>
+                <th data-column="Currency">Currency</th>
+                <th data-column="Monthly">Monthly</th>
+                <th data-column="Weekly">Weekly</th>
+                <th data-column="Daily">Daily</th>
+                <th data-column="12-Hourly">12H</th>
+                <th data-column="8-Hourly">8H</th>
+                <th data-column="6-Hourly">6H</th>
+                <th data-column="4-Hourly">4H</th>
+                <th data-column="3-Hourly">3H</th>
+                <th data-column="Status" data-is-static="true">Overall Status</th>
             </tr>
         </thead>
         <tbody>
-            <tr><td colspan="5" class="loading">Initializing...</td></tr>
-        </tbody>
+            <tr><td colspan="10" class="loading">Initializing...</td></tr> </tbody>
     </table>
 
     <script>
-        // *** NEW: This URL points to your public Netlify Function endpoint. ***
-        // The Netlify Function will handle calling your secret Google Sheets URL.
         const CSV_PROXY_URL = "/.netlify/functions/fetch-csv"; 
-        
         const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+        
+        // Define ALL available columns and their index in the CSV
+        const TIME_FRAME_COLUMNS = [
+            { name: "Currency", index: 0, filterable: false },
+            { name: "Monthly", index: 1, filterable: true },
+            { name: "Weekly", index: 2, filterable: true },
+            { name: "Daily", index: 3, filterable: true },
+            { name: "12-Hourly", index: 4, filterable: true },
+            { name: "8-Hourly", index: 5, filterable: true },
+            { name: "6-Hourly", index: 6, filterable: true },
+            { name: "4-Hourly", index: 7, filterable: true },
+            { name: "3-Hourly", index: 8, filterable: true },
+            { name: "Status", index: 9, filterable: false }
+        ];
+        const EXPECTED_COLUMNS = TIME_FRAME_COLUMNS.length; // Now 10
+        const STATUS_COLUMN_INDEX = TIME_FRAME_COLUMNS.findIndex(col => col.name === "Status");
+        
+        let activeTimeframe = 'all'; 
+
+        // --- Data Fetching and Parsing (Same as before) ---
 
         async function fetchCSV() {
             try {
-                // Call the secure proxy function instead of the direct CSV link
                 const response = await fetch(CSV_PROXY_URL);
                 
                 if (!response.ok) {
                     const errorBody = await response.json().catch(() => ({ error: 'Unknown server error.' }));
                     throw new Error(`Proxy error: ${response.status} - ${errorBody.error}`);
                 }
-                
                 const text = await response.text();
                 return text;
             } catch (err) {
                 console.error("Error fetching data from proxy:", err.message);
                 document.querySelector("#currency-table tbody").innerHTML = 
-                    `<tr><td colspan="5" style="color:red;">Error loading data: ${err.message}</td></tr>`;
+                    `<tr><td colspan="${EXPECTED_COLUMNS}" style="color:red;">Error loading data: ${err.message}</td></tr>`;
                 return "";
             }
         }
 
         function parseCSV(csvText) {
-            // Simple parsing assuming no commas within data cells
             const rows = csvText.trim().split(/\r?\n/);
             return rows.map(row => row.split(","));
         }
 
+        // --- Rendering Logic ---
+        
+        function getStatusClass(status) {
+            const cleanedStatus = status.trim().toLowerCase();
+            if (cleanedStatus.includes('buy')) return 'status-buy';
+            if (cleanedStatus.includes('sell')) return 'status-sell';
+            if (cleanedStatus.includes('hold')) return 'status-hold';
+            return 'status-default';
+        }
+        
+        function applyFilter(timeframe) {
+            activeTimeframe = timeframe;
+            const table = document.getElementById('currency-table');
+            const headers = Array.from(table.querySelectorAll('th'));
+
+            // 1. Update Header Visibility (<th>)
+            headers.forEach(header => {
+                const colName = header.getAttribute('data-column');
+                const isStatic = header.getAttribute('data-is-static') === 'true'; 
+                
+                if (timeframe === 'all' || isStatic || colName === timeframe) {
+                    header.classList.remove('hidden-col');
+                } else {
+                    header.classList.add('hidden-col');
+                }
+            });
+
+            // 2. Update Cell Visibility (<td>)
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const cells = Array.from(row.querySelectorAll('td'));
+                
+                if (cells.length === EXPECTED_COLUMNS) {
+                    cells.forEach((cell, cellIndex) => {
+                        const colDefinition = TIME_FRAME_COLUMNS[cellIndex];
+                        
+                        // Check if this column should be visible
+                        if (timeframe === 'all' || !colDefinition.filterable || colDefinition.name === timeframe) {
+                            cell.classList.remove('hidden-col');
+                        } else {
+                            cell.classList.add('hidden-col');
+                        }
+                    });
+                } else if (cells.length === 1 && cells[0].hasAttribute('colspan')) {
+                    // Handle loading/error row: update colspan
+                    const visibleCols = timeframe === 'all' ? EXPECTED_COLUMNS : 3; // Currency, Status, and one timeframe
+                    cells[0].setAttribute('colspan', visibleCols); 
+                }
+            });
+
+            // 3. Update active button state
+            document.querySelectorAll('.filter-button').forEach(button => {
+                if (button.getAttribute('data-timeframe') === timeframe) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+        }
+        
         function renderTable(data) {
             const tbody = document.querySelector("#currency-table tbody");
             tbody.innerHTML = "";
@@ -72,25 +238,37 @@
             data.forEach((row, index) => {
                 if (index === 0) return; // Skip header row
                 
-                // Expecting 5 columns (Symbol, Monthly, Weekly, Daily, Status)
-                if (row.length < 5) { 
-                    console.warn(`Skipping malformed row: ${row.join(',')}`);
+                if (row.length < EXPECTED_COLUMNS) { 
+                    console.warn(`Skipping malformed row (expected ${EXPECTED_COLUMNS} columns): ${row.join(',')}`);
                     return; 
                 }
 
                 const tr = document.createElement("tr");
-                // Only render the first 5 columns if more are present
-                row.slice(0, 5).forEach(cell => { 
+                
+                row.slice(0, EXPECTED_COLUMNS).forEach((cell, cellIndex) => { 
                     const td = document.createElement("td");
-                    td.textContent = cell.trim();
+                    const cellValue = cell.trim();
+
+                    if (cellIndex === STATUS_COLUMN_INDEX) {
+                        const statusClass = getStatusClass(cellValue);
+                        const badge = document.createElement('span');
+                        badge.className = `status-badge ${statusClass}`;
+                        badge.textContent = cellValue;
+                        td.appendChild(badge);
+                    } else {
+                        td.textContent = cellValue;
+                    }
                     tr.appendChild(td);
                 });
                 tbody.appendChild(tr);
             });
             
+            // Apply the current filter to the newly rendered table
+            applyFilter(activeTimeframe);
+            
             // Update last updated timestamp
             const now = new Date().toLocaleTimeString();
-            const captionText = `Last Updated: ${now}`;
+            const captionText = `Last Updated: ${now} JST`; // Added JST for clarity
             let caption = document.querySelector("#currency-table caption");
             if (!caption) {
                 caption = document.createElement("caption");
@@ -101,7 +279,7 @@
 
         async function updateTable() {
             document.querySelector("#currency-table tbody").innerHTML = 
-                '<tr><td colspan="5" class="loading">Fetching and processing data...</td></tr>';
+                `<tr><td colspan="${EXPECTED_COLUMNS}" class="loading">Fetching and processing data...</td></tr>`;
             
             const csvText = await fetchCSV();
             
@@ -111,12 +289,25 @@
                     renderTable(data);
                 } else {
                     document.querySelector("#currency-table tbody").innerHTML = 
-                        '<tr><td colspan="5" style="color:#FFC300;">Data is empty or incorrectly formatted.</td></tr>';
+                        `<tr><td colspan="${EXPECTED_COLUMNS}" style="color:#FFC300;">Data is empty or incorrectly formatted.</td></tr>`;
                 }
             }
         }
-
-        // Initial load and auto-refresh setup
+        
+        // --- Initialization and Event Listeners ---
+        
+        function initFilters() {
+            const filterContainer = document.getElementById('filter-container');
+            filterContainer.addEventListener('click', (event) => {
+                if (event.target.classList.contains('filter-button')) {
+                    const timeframe = event.target.getAttribute('data-timeframe');
+                    applyFilter(timeframe);
+                }
+            });
+        }
+        
+        // Initial setup
+        initFilters();
         updateTable();
         setInterval(updateTable, REFRESH_INTERVAL);
     </script>
