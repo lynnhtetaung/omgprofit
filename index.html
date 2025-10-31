@@ -3,81 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currency Signals Dashboard</title>
+    <title>OMGProfit Free Currency & Forex Signals</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"/>
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="shortcut icon" href="/favicon.ico"> 
     <style>
-        /* --- Forex Dark Theme Styles --- */
+        /* --- White Theme Styles --- */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             padding: 10px; 
-            background: #1e1e2d; 
-            color: #dcdcdc; 
+            background: #ffffff; /* White Background */
+            color: #333333; /* Dark Gray Text */
             min-height: 100vh;
+            display: flex; 
+            flex-direction: column;
         }
         h1 {
-            color: #ffffff;
-            font-weight: 300;
-            font-size: 1.5em; 
+            color: #1a1a1a;
+            font-weight: 400;
+            font-size: 1.8em; 
+            margin-bottom: 5px;
         }
-        /* Table Container for Horizontal Scroll on Mobile/Wide Tables */
+        /* Table Container */
         .table-container {
-            overflow-x: auto;
+            overflow-x: auto; 
             max-width: 100%;
             margin: 0 auto;
+            flex-grow: 1; 
         }
         table { 
             border-collapse: collapse; 
             width: 100%; 
-            min-width: 950px; /* Ensures horizontal scroll if viewport is smaller */
+            min-width: 950px; 
             max-width: 1400px; 
             margin: 20px auto; 
-            background: #27293d; 
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); 
+            background: #f7f7f7; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
             table-layout: fixed;
             border-radius: 8px;
             overflow: hidden; 
         }
         th, td { 
-            border: 1px solid #3c3f58; 
+            border: 1px solid #e0e0e0; 
             padding: 8px 4px; 
             text-align: center; 
-            color: inherit; 
+            color: #333333; 
             font-size: 0.8em; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis;
+            transition: background-color 0.3s; 
         }
+        /* General Header Style */
         th { 
-            background-color: #2c7be5; 
-            color: white; 
+            background-color: white; 
+            color: black; 
             font-weight: 600;
             text-transform: uppercase;
         }
-        tr:nth-child(even) {background-color: #2b2e40;} 
+        /* Alternating row color */
+        tr:nth-child(even) {background-color: #eeeeee;} 
         
-        /* Status Badge Styles */
-        .status-badge {
-            display: inline-block;
-            padding: 4px 8px; 
-            border-radius: 4px;
-            font-size: 0.8em;
-            font-weight: bold;
-            color: white;
+        /* Currency Display */
+        .currency-cell {
             text-transform: uppercase;
+            font-weight: bold;
         }
-        .status-buy { background-color: #00b050; } 
-        .status-sell { background-color: #ff3366; } 
-        .status-hold { background-color: #ff9800; } 
-        .status-default { background-color: #5a5a5a; } 
 
-        /* Filter Styles */
+        /* --- STICKY COLUMN (Currency) --- */
+        .table-container {
+            position: relative; 
+        }
+        th:first-child,
+        td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 2; 
+        }
+        
+        /* Currency header matches general header (white background, black text) */
+        th:first-child {
+            background-color: white; 
+            color: black;            
+        }
+        
+        /* Sticky data cells remain light gray to stand out from other cells */
+        td:first-child {
+            background-color: #f0f0f0; 
+        }
+        tr:nth-child(even) td:first-child {
+            background-color: #e5e5e5; 
+        }
+        
+        /* --- Status Cell Styles (Apply directly to TD) --- */
+        
+        /* BUY: Blue (High Contrast) */
+        td.status-buy { 
+            background-color: #2c7be5 !important; 
+            color: white; 
+            font-weight: bold;
+        } 
+        
+        /* SELL: Red (High Contrast) */
+        td.status-sell { 
+            background-color: #ff3366 !important; 
+            color: white; 
+            font-weight: bold;
+        } 
+        
+        /* HOLD: No Color (Uses default light background, text is dark gray) */
+        td.status-hold { 
+            background-color: transparent !important; 
+            color: #333333; 
+        } 
+        
+        td.status-default { 
+            background-color: #aaaaaa !important; 
+            color: white;
+        } 
+        
+        /* Filter Button (Adjusted for white background) */
         #filter-container {
             text-align: center;
-            margin: 20px auto 10px auto; /* Reduced bottom margin */
+            margin: 20px auto 10px auto; 
             max-width: 1400px; 
         }
         .filter-button {
             padding: 8px 10px; 
-            margin: 0 3px 6px 3px;
-            border: none;
-            background-color: #3f425c; 
-            color: #dcdcdc;
+            border: 1px solid #ccc;
+            background-color: #ffffff; 
+            color: #333333;
             cursor: pointer;
             border-radius: 4px;
             font-size: 0.8em;
@@ -85,67 +147,70 @@
         .filter-button.active {
             background-color: #2c7be5; 
             color: white;
-            box-shadow: 0 0 8px rgba(44, 123, 229, 0.6);
+            box-shadow: 0 0 8px rgba(44, 123, 229, 0.4);
             font-weight: bold;
+            border-color: #2c7be5;
         }
         
-        /* Timeframe Key Styles */
-        #timeframe-key {
+        /* Flag Styling */
+        .fi {
+            margin-right: 5px;
+            vertical-align: middle;
+            line-height: 1; 
+        }
+
+        /* --- AdSense Placeholder Styling (Optional but helpful) --- */
+        .ad-placeholder {
+            max-width: 1400px;
+            margin: 10px auto;
+            padding: 15px;
             text-align: center;
-            font-size: 0.85em;
-            color: #9a9a9a;
-            margin-bottom: 20px;
+            border: 1px dashed #cccccc;
+            background-color: #f9f9f9;
+            color: #666;
+            font-size: 0.9em;
         }
-        
-        /* Utility class to hide columns */
-        .hidden-col {
-            display: none;
+
+        /* --- New Footer Styles --- */
+        footer {
+            max-width: 1400px;
+            margin: 20px auto 10px auto;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.75em;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+        footer p {
+            margin: 5px 0;
+        }
+
+        /* !!! IMPORTANT: STYLES FOR THE DISCLAIMER !!! */
+        .disclaimer-text {
+            color: #cc0000; /* Bright Red Color */
+            font-size: 1.1em; /* Larger than default footer text (0.75em * 1.1 = good size) */
+            font-weight: 600; /* Bold the text */
         }
 
         /* --- Mobile Responsiveness --- */
         @media (max-width: 650px) {
             body { padding: 10px; }
-            h1 { font-size: 1.2em; margin-top: 10px; }
-            
-            /* Make filter buttons wrap nicely */
-            #filter-container {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .filter-button {
-                flex-grow: 1; 
-                max-width: 20%; 
-                margin: 3px;
-            }
-            #timeframe-key {
-                padding: 0 10px;
-                text-align: left; /* Use left alignment on mobile for better wrapping */
-            }
+            h1 { font-size: 1.5em; margin-top: 10px; }
+            table { min-width: 700px; } 
         }
     </style>
 </head>
 <body>
-    <h1 style="text-align:center;">OMG Profit Currency Signals</h1>
+    <h1 style="text-align:center;">OMGProfit Free Currency & Forex Signals</h1>
     
+    <div class="ad-placeholder">
+        **AdSense Code Block 1 (Top Banner)**
+        <p>Paste your AdSense code here.</p>
+    </div>
     <div id="filter-container">
-        <button class="filter-button active" data-timeframe="all">ALL</button>
-        <button class="filter-button" data-timeframe="1-Hourly">1H</button>
-        <button class="filter-button" data-timeframe="2-Hourly">2H</button>
-        <button class="filter-button" data-timeframe="3-Hourly">3H</button>
-        <button class="filter-button" data-timeframe="4-Hourly">4H</button>
-        <button class="filter-button" data-timeframe="6-Hourly">6H</button>
-        <button class="filter-button" data-timeframe="8-Hourly">8H</button>
-        <button class="filter-button" data-timeframe="12-Hourly">12H</button>
-        <button class="filter-button" data-timeframe="Daily">D</button>
-        <button class="filter-button" data-timeframe="Weekly">W</button>
-        <button class="filter-button" data-timeframe="Monthly">M</button>
+        <button class="filter-button active" data-timeframe="all">Forex</button>
     </div>
 
-    <div id="timeframe-key">
-        1H = 1-Hourly, D = Daily, W = Weekly, M = Monthly.
-        (Other labels like 2H, 3H, etc., stand for their respective hours)
-    </div>
     <div class="table-container">
         <table id="currency-table">
             <thead>
@@ -169,14 +234,28 @@
             </tbody>
         </table>
     </div>
-
+    
+    <div class="ad-placeholder">
+        **AdSense Code Block 2 (Mid-Page/Rectangle)**
+        <p>Paste your AdSense code here.</p>
+    </div>
+    <div class="ad-placeholder">
+        **AdSense Code Block 3 (Bottom/Link Unit)**
+        <p>Paste your AdSense code here.</p>
+    </div>
+    <footer>
+        <p>&copy; Copyright OMGProfit 2025. All Rights Reserved.</p>
+        <p class="disclaimer-text">
+            **Risk Disclaimer:** Trading foreign exchange (Forex) and/or Contracts for Difference (CFDs) on margin carries a high level of risk, and may not be suitable for all investors. The high degree of leverage can work against you as well as for you. Before deciding to trade Forex/CFDs, you should carefully consider your investment objectives, level of experience, and risk appetite. The signals provided on this website are for informational purposes only and do not constitute financial advice. Past performance is not indicative of future results.
+        </p>
+    </footer>
     <script>
         // --- Configuration ---
-        const USE_LIVE_PROXY = true; // <<< REMAINS TRUE FOR LIVE DATA
+        // !!! SET TO TRUE FOR LIVE DEPLOYMENT VIA NETLIFY PROXY !!!
+        const USE_LIVE_PROXY = true; 
         const CSV_PROXY_URL = "/.netlify/functions/fetch-csv"; 
-        const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+        const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes refresh
         
-        // Define ALL available columns and their index in the CSV (MUST MATCH 12 COLUMNS)
         const TIME_FRAME_COLUMNS = [
             { name: "Currency", index: 0, filterable: false },
             { name: "1-Hourly", index: 1, filterable: true },
@@ -191,35 +270,54 @@
             { name: "Monthly", index: 10, filterable: true },
             { name: "Status", index: 11, filterable: false }
         ];
-        const EXPECTED_COLUMNS = TIME_FRAME_COLUMNS.length; // Now 12
+        const EXPECTED_COLUMNS = TIME_FRAME_COLUMNS.length; 
         const STATUS_COLUMN_INDEX = TIME_FRAME_COLUMNS.findIndex(col => col.name === "Status");
+        const CURRENCY_COLUMN_INDEX = TIME_FRAME_COLUMNS.findIndex(col => col.name === "Currency");
         
         let activeTimeframe = 'all'; 
+
+        // --- Currency to Flag Mapping ---
+        const CURRENCY_TO_FLAG = {
+            'EUR': 'eu',
+            'USD': 'us',
+            'GBP': 'gb',
+            'JPY': 'jp',
+            'AUD': 'au',
+            'NZD': 'nz',
+            'CAD': 'ca',
+            'CHF': 'ch',
+            'XAU': 'au', 
+            'XAG': 'us' 
+        };
         
-        // --- MOCK DATA (BYPASSED) ---
+        // --- MOCK DATA FUNCTION (Included for completeness) ---
         function fetchMockCSV() {
+            console.warn("--- Fetching MOCK data for local testing ---");
             const mockData = 
 `Currency,1-Hourly,2-Hourly,3-Hourly,4-Hourly,6-Hourly,8-Hourly,12-Hourly,Daily,Weekly,Monthly,Overall Status
 EURUSD,BUY,HOLD,BUY,SELL,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD
 GBPUSD,SELL,BUY,HOLD,BUY,SELL,HOLD,BUY,BUY,BUY,SELL,BUY
 USDJPY,HOLD,SELL,BUY,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD,SELL
 AUDCAD,BUY,HOLD,SELL,BUY,HOLD,SELL,BUY,BUY,HOLD,SELL,BUY
-EURGBP,SELL,BUY,HOLD,SELL,BUY,HOLD,SELL,HOLD,BUY,SELL,HOLD`;
-            
+EURGBP,SELL,BUY,HOLD,SELL,BUY,HOLD,SELL,HOLD,BUY,SELL,HOLD
+NZDCAD,BUY,BUY,BUY,HOLD,HOLD,SELL,SELL,BUY,HOLD,SELL,BUY
+XAUUSD,BUY,SELL,BUY,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD,SELL
+USDCHF,HOLD,HOLD,BUY,SELL,BUY,HOLD,SELL,BUY,SELL,BUY,HOLD
+GBPJPY,SELL,BUY,HOLD,BUY,SELL,HOLD,BUY,BUY,BUY,SELL,BUY
+CADCHF,HOLD,SELL,BUY,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD,SELL`; 
+
             return Promise.resolve(mockData);
         }
-        
-        // --- LIVE DATA FETCH (ACTIVE) ---
+
+        // --- LIVE DATA FETCH (Active when USE_LIVE_PROXY is true) ---
         async function fetchLiveCSV() {
             try {
                 const response = await fetch(CSV_PROXY_URL);
-                
                 if (!response.ok) {
                     const errorBody = await response.json().catch(() => ({ error: 'Unknown server error.' }));
                     throw new Error(`Proxy error: ${response.status} - ${errorBody.error}`);
                 }
-                const text = await response.text();
-                return text;
+                return await response.text();
             } catch (err) {
                 console.error("Error fetching data from proxy:", err.message);
                 document.querySelector("#currency-table tbody").innerHTML = 
@@ -228,7 +326,7 @@ EURGBP,SELL,BUY,HOLD,SELL,BUY,HOLD,SELL,HOLD,BUY,SELL,HOLD`;
             }
         }
         
-        // --- Main Fetch Function ---
+        // --- Main Fetch Function: Chooses between Live and Mock ---
         async function fetchCSV() {
             if (USE_LIVE_PROXY) {
                 return fetchLiveCSV();
@@ -237,13 +335,12 @@ EURGBP,SELL,BUY,HOLD,SELL,BUY,HOLD,SELL,HOLD,BUY,SELL,HOLD`;
             }
         }
 
-        // --- Parsing and Rendering Logic ---
-
         function parseCSV(csvText) {
             const rows = csvText.trim().split(/\r?\n/);
             return rows.map(row => row.split(","));
         }
 
+        // Returns status class based on the signal
         function getStatusClass(status) {
             const cleanedStatus = status.trim().toLowerCase();
             if (cleanedStatus.includes('buy')) return 'status-buy';
@@ -252,62 +349,40 @@ EURGBP,SELL,BUY,HOLD,SELL,BUY,HOLD,SELL,HOLD,BUY,SELL,HOLD`;
             return 'status-default';
         }
         
-        function applyFilter(timeframe) {
-            activeTimeframe = timeframe;
-            const table = document.getElementById('currency-table');
-            const headers = Array.from(table.querySelectorAll('th'));
+        // --- Flag & Currency Renderer ---
+        function createCurrencyCell(currencyPair) {
+            const td = document.createElement("td");
+            td.classList.add('currency-cell');
+            
+            const baseCurrency = currencyPair.substring(0, 3).toUpperCase();
+            const quoteCurrency = currencyPair.substring(3, 6).toUpperCase();
+            
+            let htmlContent = '';
 
-            // 1. Update Header Visibility (<th>)
-            headers.forEach(header => {
-                const colName = header.getAttribute('data-column');
-                const isStatic = colName === 'Currency' || colName === 'Status';
-                
-                if (timeframe === 'all' || isStatic || colName === timeframe) {
-                    header.classList.remove('hidden-col');
-                } else {
-                    header.classList.add('hidden-col');
-                }
-            });
+            const flag1 = CURRENCY_TO_FLAG[baseCurrency];
+            if (flag1) {
+                htmlContent += `<span class="fi fi-${flag1}"></span>`;
+            }
+            htmlContent += baseCurrency;
+            
+            htmlContent += '/';
 
-            // 2. Update Cell Visibility (<td>)
-            const rows = table.querySelectorAll('tbody tr');
-            rows.forEach(row => {
-                const cells = Array.from(row.querySelectorAll('td'));
-                
-                if (cells.length === EXPECTED_COLUMNS) {
-                    cells.forEach((cell, cellIndex) => {
-                        const colDefinition = TIME_FRAME_COLUMNS[cellIndex];
-                        
-                        // Check if this column should be visible
-                        if (timeframe === 'all' || !colDefinition.filterable || colDefinition.name === timeframe) {
-                            cell.classList.remove('hidden-col');
-                        } else {
-                            cell.classList.add('hidden-col');
-                        }
-                    });
-                } else if (cells.length === 1 && cells[0].hasAttribute('colspan')) {
-                    // Handle loading/error row: update colspan
-                    const visibleCols = timeframe === 'all' ? EXPECTED_COLUMNS : 3;
-                    cells[0].setAttribute('colspan', visibleCols); 
-                }
-            });
-
-            // 3. Update active button state
-            document.querySelectorAll('.filter-button').forEach(button => {
-                if (button.getAttribute('data-timeframe') === timeframe) {
-                    button.classList.add('active');
-                } else {
-                    button.classList.remove('active');
-                }
-            });
+            const flag2 = CURRENCY_TO_FLAG[quoteCurrency];
+            if (flag2) {
+                htmlContent += `<span class="fi fi-${flag2}"></span>`;
+            }
+            htmlContent += quoteCurrency;
+            
+            td.innerHTML = htmlContent;
+            return td;
         }
-        
+
         function renderTable(data) {
             const tbody = document.querySelector("#currency-table tbody");
             tbody.innerHTML = "";
             
             data.forEach((row, index) => {
-                if (index === 0) return; // Skip header row
+                if (index === 0) return; 
                 
                 if (row.length < EXPECTED_COLUMNS) { 
                     console.warn(`Skipping malformed row (expected ${EXPECTED_COLUMNS} columns): ${row.join(',')}`);
@@ -317,23 +392,29 @@ EURGBP,SELL,BUY,HOLD,SELL,BUY,HOLD,SELL,HOLD,BUY,SELL,HOLD`;
                 const tr = document.createElement("tr");
                 
                 row.slice(0, EXPECTED_COLUMNS).forEach((cell, cellIndex) => { 
-                    const td = document.createElement("td");
                     const cellValue = cell.trim();
-
-                    if (cellIndex === STATUS_COLUMN_INDEX) {
+                    
+                    if (cellIndex === CURRENCY_COLUMN_INDEX) {
+                        const currencyTd = createCurrencyCell(cellValue);
+                        tr.appendChild(currencyTd);
+                        return; 
+                    } 
+                    
+                    const td = document.createElement("td");
+                    td.textContent = cellValue;
+                    
+                    // Apply color class to all signal columns and the final Status column
+                    if (cellIndex > CURRENCY_COLUMN_INDEX) {
                         const statusClass = getStatusClass(cellValue);
-                        const badge = document.createElement('span');
-                        badge.className = `status-badge ${statusClass}`;
-                        badge.textContent = cellValue;
-                        td.appendChild(badge);
-                    } else {
-                        td.textContent = cellValue;
+                        td.classList.add(statusClass);
                     }
+
                     tr.appendChild(td);
                 });
                 tbody.appendChild(tr);
             });
             
+            // Updates the ALL button state (which is always active now)
             applyFilter(activeTimeframe);
             
             const now = new Date().toLocaleTimeString();
@@ -344,6 +425,17 @@ EURGBP,SELL,BUY,HOLD,SELL,BUY,HOLD,SELL,HOLD,BUY,SELL,HOLD`;
                 document.getElementById("currency-table").appendChild(caption);
             }
             caption.textContent = captionText;
+        }
+        
+        // --- Filter Logic (Simplified - only handles 'all') ---
+        function applyFilter(timeframe) {
+            document.querySelectorAll('.filter-button').forEach(button => {
+                if (button.getAttribute('data-timeframe') === 'all') {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
         }
 
         async function updateTable() {
@@ -363,28 +455,17 @@ EURGBP,SELL,BUY,HOLD,SELL,BUY,HOLD,SELL,HOLD,BUY,SELL,HOLD`;
             }
         }
         
-        // --- Initialization and Event Listeners ---
-        
-        function initFilters() {
-            const filterContainer = document.getElementById('filter-container');
-            if (filterContainer) {
-                filterContainer.addEventListener('click', (event) => {
-                    if (event.target.classList.contains('filter-button')) {
-                        const timeframe = event.target.getAttribute('data-timeframe');
-                        applyFilter(timeframe);
-                    }
-                });
+        // --- Initialization ---
+        function init() {
+            updateTable();
+            
+            // Set interval only if using the live proxy
+            if (USE_LIVE_PROXY) {
+                setInterval(updateTable, REFRESH_INTERVAL);
             }
         }
         
-        // Initial setup
-        initFilters();
-        updateTable();
-        
-        // Set the auto-refresh interval when using live data
-        if (USE_LIVE_PROXY) {
-            setInterval(updateTable, REFRESH_INTERVAL);
-        }
+        init();
     </script>
 </body>
 </html>
