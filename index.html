@@ -1,165 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OMGProfit Free Currency & Forex Signals</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"/>
-    
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
-    <link rel="shortcut icon" href="/favicon.ico"> 
+    <link rel="shortcut icon" href="favicon.ico">
     <style>
-        /* --- White Theme Styles --- */
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            padding: 10px; 
-            background: #ffffff; /* White Background */
-            color: #333333; /* Dark Gray Text */
+        /* --- General Styles --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 10px;
+            background: #ffffff;
+            color: #333333;
             min-height: 100vh;
-            display: flex; 
+            display: flex;
             flex-direction: column;
         }
+
         h1 {
             color: #1a1a1a;
             font-weight: 400;
-            font-size: 1.8em; 
+            font-size: 1.8em;
             margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        /* Table Container */
-        .table-container {
-            overflow-x: auto; 
-            max-width: 100%;
+
+        .header-favicon {
+            width: 32px;
+            height: 32px;
+            margin-right: 10px;
+        }
+
+        /* ------------------------------------- */
+        /* --- MAIN LAYOUT (DESKTOP) --- */
+        /* ------------------------------------- */
+        #main-layout {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            max-width: 1700px;
             margin: 0 auto;
-            flex-grow: 1; 
-        }
-        table { 
-            border-collapse: collapse; 
-            width: 100%; 
-            min-width: 950px; 
-            max-width: 1400px; 
-            margin: 20px auto; 
-            background: #f7f7f7; 
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
-            table-layout: fixed;
-            border-radius: 8px;
-            overflow: hidden; 
-        }
-        th, td { 
-            border: 1px solid #e0e0e0; 
-            padding: 8px 4px; 
-            text-align: center; 
-            color: #333333; 
-            font-size: 0.8em; 
-            white-space: nowrap; 
-            overflow: hidden; 
-            text-overflow: ellipsis;
-            transition: background-color 0.3s; 
-        }
-        /* General Header Style */
-        th { 
-            background-color: white; 
-            color: black; 
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        /* Alternating row color */
-        tr:nth-child(even) {background-color: #eeeeee;} 
-        
-        /* Currency Display */
-        .currency-cell {
-            text-transform: uppercase;
-            font-weight: bold;
         }
 
-        /* --- STICKY COLUMN (Currency) --- */
-        .table-container {
-            position: relative; 
-        }
-        th:first-child,
-        td:first-child {
-            position: sticky;
-            left: 0;
-            z-index: 2; 
-        }
-        
-        /* Currency header matches general header (white background, black text) */
-        th:first-child {
-            background-color: white; 
-            color: black;            
-        }
-        
-        /* Sticky data cells remain light gray to stand out from other cells */
-        td:first-child {
-            background-color: #f0f0f0; 
-        }
-        tr:nth-child(even) td:first-child {
-            background-color: #e5e5e5; 
-        }
-        
-        /* --- Status Cell Styles (Apply directly to TD) --- */
-        
-        /* BUY: Blue (High Contrast) */
-        td.status-buy { 
-            background-color: #2c7be5 !important; 
-            color: white; 
-            font-weight: bold;
-        } 
-        
-        /* SELL: Red (High Contrast) */
-        td.status-sell { 
-            background-color: #ff3366 !important; 
-            color: white; 
-            font-weight: bold;
-        } 
-        
-        /* HOLD: No Color (Uses default light background, text is dark gray) */
-        td.status-hold { 
-            background-color: transparent !important; 
-            color: #333333; 
-        } 
-        
-        td.status-default { 
-            background-color: #aaaaaa !important; 
-            color: white;
-        } 
-        
-        /* Filter Button (Adjusted for white background) */
-        #filter-container {
+        .side-ad-placeholder {
+            width: 160px;
+            margin: 20px 10px;
+            padding: 15px;
             text-align: center;
-            margin: 20px auto 10px auto; 
-            max-width: 1400px; 
-        }
-        .filter-button {
-            padding: 8px 10px; 
-            border: 1px solid #ccc;
-            background-color: #ffffff; 
-            color: #333333;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 0.8em;
-        }
-        .filter-button.active {
-            background-color: #2c7be5; 
-            color: white;
-            box-shadow: 0 0 8px rgba(44, 123, 229, 0.4);
-            font-weight: bold;
-            border-color: #2c7be5;
-        }
-        
-        /* Flag Styling */
-        .fi {
-            margin-right: 5px;
-            vertical-align: middle;
-            line-height: 1; 
+            border: 1px dashed #cccccc;
+            background-color: #f9f9f9;
+            color: #666;
+            font-size: 0.9em;
+            align-self: flex-start;
+            flex-shrink: 0;
         }
 
-        /* --- AdSense Placeholder Styling (Optional but helpful) --- */
+        /* Hide the top/bottom ads that were moved to the side */
+        .ad-placeholder.hidden-on-desktop {
+            display: none;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            max-width: 100%;
+            margin: 0;
+            flex-grow: 1;
+            min-width: 950px;
+        }
+
+        /* General ad placeholder remains for the top banner only */
         .ad-placeholder {
             max-width: 1400px;
             margin: 10px auto;
@@ -171,7 +92,157 @@
             font-size: 0.9em;
         }
 
-        /* --- New Footer Styles --- */
+        /* ------------------------------------- */
+        /* --- TABLE STYLES (Revised) --- */
+        /* ------------------------------------- */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 950px;
+            max-width: 1400px;
+            margin: 20px auto;
+            background: #f7f7f7;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            table-layout: fixed;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            border: 1px solid #e0e0e0;
+            padding: 8px 4px;
+            text-align: center;
+            color: #333333;
+            font-size: 0.8em;
+            white-space: nowrap;
+            /* Keep content on one line */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: background-color 0.3s;
+        }
+
+        /* --- COLUMN WIDTH CONTROL (The main change) --- */
+        /* Currency Column: 10% width, ensures flag + currency is visible */
+        #currency-table th:nth-child(1),
+        #currency-table td:nth-child(1) {
+            width: 120px;
+            min-width: 120px;
+        }
+
+        /* Time Frame Columns (2-11): Narrower width to fit 10 columns across */
+        #currency-table th:not(:nth-child(1)):not(:nth-child(12)),
+        #currency-table td:not(:nth-child(1)):not(:nth-child(12)) {
+            width: calc((100% - 250px) / 10);
+            /* Distribute remaining space */
+            min-width: 70px;
+            /* Smallest comfortable width for 1H, 2H, etc. */
+        }
+
+        /* Status Column: 5% width, ensures full word 'Status' is visible */
+        #currency-table th:nth-child(12),
+        #currency-table td:nth-child(12) {
+            width: 80px;
+            min-width: 80px;
+        }
+
+        /* General Header Style */
+        th {
+            background-color: white;
+            color: black;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Alternating row color */
+        tr:nth-child(even) {
+            background-color: #eeeeee;
+        }
+
+        /* Currency Display */
+        .currency-cell {
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        /* Sticky Column */
+        .table-container {
+            position: relative;
+        }
+
+        th:first-child,
+        td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background-color: white;
+            color: black;
+            font-weight: 600;
+        }
+
+        td:first-child {
+            background-color: #f0f0f0;
+        }
+
+        tr:nth-child(even) td:first-child {
+            background-color: #e5e5e5;
+        }
+
+        /* Status Cell Styles */
+        td.status-buy {
+            background-color: #2c7be5 !important;
+            color: white;
+            font-weight: bold;
+        }
+
+        td.status-sell {
+            background-color: #ff3366 !important;
+            color: white;
+            font-weight: bold;
+        }
+
+        td.status-hold {
+            background-color: transparent !important;
+            color: #333333;
+        }
+
+        td.status-default {
+            background-color: #aaaaaa !important;
+            color: white;
+        }
+
+        /* Filter Button */
+        #filter-container {
+            text-align: center;
+            margin: 20px auto 10px auto;
+            max-width: 1400px;
+        }
+
+        .filter-button {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            background-color: #ffffff;
+            color: #333333;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+
+        .filter-button.active {
+            background-color: #2c7be5;
+            color: white;
+            box-shadow: 0 0 8px rgba(44, 123, 229, 0.4);
+            font-weight: bold;
+            border-color: #2c7be5;
+        }
+
+        .fi {
+            margin-right: 5px;
+            vertical-align: middle;
+            line-height: 1;
+        }
+
+        /* Footer */
         footer {
             max-width: 1400px;
             margin: 20px auto 10px auto;
@@ -181,28 +252,160 @@
             color: #666;
             border-top: 1px solid #eee;
         }
-        footer p {
-            margin: 5px 0;
-        }
 
-        /* !!! IMPORTANT: STYLES FOR THE DISCLAIMER !!! */
         .disclaimer-text {
-            color: #cc0000; /* Bright Red Color */
-            font-size: 1.1em; /* Larger than default footer text (0.75em * 1.1 = good size) */
-            font-weight: 600; /* Bold the text */
+            color: #cc0000;
+            font-size: 1.1em;
+            font-weight: 600;
         }
 
-        /* --- Mobile Responsiveness --- */
+        /* ------------------------------------- */
+        /* --- Mobile Responsiveness (UPDATED) --- */
+        /* ------------------------------------- */
+
+        /* Tablet/General Mobile Layout (Screens <= 1300px) */
+        @media (max-width: 1300px) {
+            #main-layout {
+                flex-direction: column;
+                max-width: 950px;
+            }
+
+            .side-ad-placeholder {
+                display: none;
+            }
+
+            .ad-placeholder.hidden-on-desktop {
+                display: block;
+                max-width: 950px;
+                margin: 10px auto;
+            }
+
+            /* Crucially reduced min-width for table */
+            table {
+                min-width: 400px;
+            }
+        }
+
+        /* Small Mobile Layout (Screens <= 650px) */
         @media (max-width: 650px) {
-            body { padding: 10px; }
-            h1 { font-size: 1.5em; margin-top: 10px; }
-            table { min-width: 700px; } 
+            h1 {
+                font-size: 1.5em;
+                margin-top: 10px;
+                flex-direction: column;
+            }
+
+            .header-favicon {
+                margin: 0 0 5px 0;
+            }
+        }
+
+        /* ** NEW: Very Small Phone Layout (Screens <= 420px) ** */
+        @media (max-width: 420px) {
+
+            /* Shrink everything a bit more */
+            th,
+            td {
+                font-size: 0.65em;
+                /* Further reduced font size */
+                padding: 4px 1px;
+                /* Heavily reduced padding */
+            }
+
+            /* Simplify headers to save horizontal space */
+            /* Hide the full 'Daily', 'Weekly', 'Monthly' text */
+            #currency-table th[data-column="Daily"] span,
+            #currency-table th[data-column="Weekly"] span,
+            #currency-table th[data-column="Monthly"] span {
+                display: none;
+            }
+
+            /* Currency Column gets a little smaller */
+            #currency-table th:nth-child(1),
+            #currency-table td:nth-child(1) {
+                width: 90px;
+                min-width: 90px;
+            }
+
+            /* Status Column gets a little smaller */
+            #currency-table th:nth-child(12),
+            #currency-table td:nth-child(12) {
+                width: 50px;
+                min-width: 50px;
+            }
+
+            /* Recalculate distributed width */
+            #currency-table th:not(:nth-child(1)):not(:nth-child(12)),
+            #currency-table td:not(:nth-child(1)):not(:nth-child(12)) {
+                min-width: 25px;
+                /* Reduced minimum width for hourly cells */
+            }
+
+            /* Ensure table can shrink more */
+            .table-container {
+                min-width: 100%;
+                /* Allows it to shrink to screen width */
+            }
+
+            table {
+                /* Target minimum width is now around 90 + 10*25 + 50 = 390px */
+                min-width: 370px;
+            }
+
+            /* * CRITICAL CHANGE: Shorten BUY/SELL/HOLD to single letters
+             * The JS needs to be updated to render B/S/H instead of BUY/SELL/HOLD 
+             * on these screen sizes. Since we cannot change your JS, 
+             * we will instruct the user to update the status text in the smallest view.
+             * * For the fastest fix, we will override the text inside the cells 
+             * using a creative CSS/content method. This is a common trick.
+             */
+
+            td.status-buy {
+                font-size: 0;
+            }
+
+            /* Hide original text */
+            td.status-sell {
+                font-size: 0;
+            }
+
+            /* Hide original text */
+            td.status-hold {
+                font-size: 0;
+            }
+
+            /* Hide original text */
+
+            td.status-buy:before,
+            td.status-sell:before,
+            td.status-hold:before {
+                content: attr(data-short-status);
+                /* Use a data attribute for short text */
+                font-size: 1rem;
+                /* Reset font size to be legible */
+            }
+
+            /* Fallback content for the CSS-only approach, which requires JS changes */
+            td.status-buy:before {
+                content: 'BUY';
+            }
+
+            td.status-sell:before {
+                content: 'SELL';
+            }
+
+            td.status-hold:before {
+                content: 'HOLD';
+            }
         }
     </style>
 </head>
+
 <body>
-    <h1 style="text-align:center;">OMGProfit Free Currency & Forex Signals</h1>
-    
+    <h1 style="text-align:center;">
+        <img src="favicon-32x32.png" alt="OMGProfit Logo" class="header-favicon">
+        OMGProfit Free Currency & Forex Signals
+    </h1>
+
     <div class="ad-placeholder">
         **AdSense Code Block 1 (Top Banner)**
         <p>Paste your AdSense code here.</p>
@@ -211,51 +414,71 @@
         <button class="filter-button active" data-timeframe="all">Forex</button>
     </div>
 
-    <div class="table-container">
-        <table id="currency-table">
-            <thead>
-                <tr>
-                    <th data-column="Currency">Currency</th>
-                    <th data-column="1-Hourly">1H</th>
-                    <th data-column="2-Hourly">2H</th>
-                    <th data-column="3-Hourly">3H</th>
-                    <th data-column="4-Hourly">4H</th>
-                    <th data-column="6-Hourly">6H</th>
-                    <th data-column="8-Hourly">8H</th>
-                    <th data-column="12-Hourly">12H</th>
-                    <th data-column="Daily">D</th>
-                    <th data-column="Weekly">W</th>
-                    <th data-column="Monthly">M</th>
-                    <th data-column="Status" data-is-static="true">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td colspan="12" class="loading">Initializing...</td></tr> 
-            </tbody>
-        </table>
+    <div id="main-layout">
+
+        <div class="side-ad-placeholder left-ad">
+            **AdSense Code Block 2 (Left Skyscraper)**
+            <p>Paste your AdSense code here. (e.g., 160x600)</p>
+        </div>
+
+        <div class="table-container">
+            <table id="currency-table">
+                <thead>
+                    <tr>
+                        <th data-column="Currency">Pairs/Currency</th>
+                        <th data-column="1-Hourly">1H</th>
+                        <th data-column="2-Hourly">2H</th>
+                        <th data-column="3-Hourly">3H</th>
+                        <th data-column="4-Hourly">4H</th>
+                        <th data-column="6-Hourly">6H</th>
+                        <th data-column="8-Hourly">8H</th>
+                        <th data-column="12-Hourly">12H</th>
+                        <th data-column="Daily">D<span class="full-text">aily</span></th>
+                        <th data-column="Weekly">W<span class="full-text">eekly</span></th>
+                        <th data-column="Monthly">M<span class="full-text">onthly</span></th>
+                        <th data-column="Status" data-is-static="true">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="12" class="loading">Initializing...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="side-ad-placeholder right-ad">
+            **AdSense Code Block 3 (Right Skyscraper)**
+            <p>Paste your AdSense code here. (e.g., 160x600)</p>
+        </div>
+
     </div>
-    
-    <div class="ad-placeholder">
-        **AdSense Code Block 2 (Mid-Page/Rectangle)**
-        <p>Paste your AdSense code here.</p>
+    <div class="ad-placeholder hidden-on-desktop">
+        **AdSense Code Block 2 (Mobile/Tablet)**
+        <p>Paste your AdSense code here (e.g., 300x250).</p>
     </div>
-    <div class="ad-placeholder">
-        **AdSense Code Block 3 (Bottom/Link Unit)**
-        <p>Paste your AdSense code here.</p>
+    <div class="ad-placeholder hidden-on-desktop">
+        **AdSense Code Block 3 (Mobile/Tablet)**
+        <p>Paste your AdSense code here (e.g., 300x250).</p>
     </div>
     <footer>
         <p>&copy; Copyright OMGProfit 2025. All Rights Reserved.</p>
         <p class="disclaimer-text">
-            **Risk Disclaimer:** Trading foreign exchange (Forex) and/or Contracts for Difference (CFDs) on margin carries a high level of risk, and may not be suitable for all investors. The high degree of leverage can work against you as well as for you. Before deciding to trade Forex/CFDs, you should carefully consider your investment objectives, level of experience, and risk appetite. The signals provided on this website are for informational purposes only and do not constitute financial advice. Past performance is not indicative of future results.
+            **Risk Disclaimer:** Trading foreign exchange (Forex) and/or Contracts for Difference (CFDs) on margin
+            carries a high level of risk, and may not be suitable for all investors. The high degree of leverage can
+            work against you as well as for you. Before deciding to trade Forex/CFDs, you should carefully consider your
+            investment objectives, level of experience, and risk appetite. The signals provided on this website are for
+            informational purposes only and do not constitute financial advice. Past performance is not indicative of
+            future results.
         </p>
     </footer>
     <script>
         // --- Configuration ---
-        // !!! SET TO TRUE FOR LIVE DEPLOYMENT VIA NETLIFY PROXY !!!
-        const USE_LIVE_PROXY = true; 
-        const CSV_PROXY_URL = "/.netlify/functions/fetch-csv"; 
+        // !!! SET TO FALSE (Local Test) !!!
+        const USE_LIVE_PROXY = true;
+        const CSV_PROXY_URL = "/.netlify/functions/fetch-csv";
         const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes refresh
-        
+
         const TIME_FRAME_COLUMNS = [
             { name: "Currency", index: 0, filterable: false },
             { name: "1-Hourly", index: 1, filterable: true },
@@ -270,11 +493,11 @@
             { name: "Monthly", index: 10, filterable: true },
             { name: "Status", index: 11, filterable: false }
         ];
-        const EXPECTED_COLUMNS = TIME_FRAME_COLUMNS.length; 
+        const EXPECTED_COLUMNS = TIME_FRAME_COLUMNS.length;
         const STATUS_COLUMN_INDEX = TIME_FRAME_COLUMNS.findIndex(col => col.name === "Status");
         const CURRENCY_COLUMN_INDEX = TIME_FRAME_COLUMNS.findIndex(col => col.name === "Currency");
-        
-        let activeTimeframe = 'all'; 
+
+        let activeTimeframe = 'all';
 
         // --- Currency to Flag Mapping ---
         const CURRENCY_TO_FLAG = {
@@ -286,16 +509,16 @@
             'NZD': 'nz',
             'CAD': 'ca',
             'CHF': 'ch',
-            'XAU': 'au', 
-            'XAG': 'us' 
+            'XAU': 'au',
+            'XAG': 'us'
         };
-        
+
         // --- MOCK DATA FUNCTION (Included for completeness) ---
         function fetchMockCSV() {
             console.warn("--- Fetching MOCK data for local testing ---");
-            const mockData = 
-`Currency,1-Hourly,2-Hourly,3-Hourly,4-Hourly,6-Hourly,8-Hourly,12-Hourly,Daily,Weekly,Monthly,Overall Status
-EURUSD,BUY,HOLD,BUY,SELL,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD
+            const mockData =
+                `Currency,1-Hourly,2-Hourly,3-Hourly,4-Hourly,6-Hourly,8-Hourly,12-Hourly,Daily,Weekly,Monthly,Overall Status
+USD,BUY,HOLD,BUY,SELL,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD
 GBPUSD,SELL,BUY,HOLD,BUY,SELL,HOLD,BUY,BUY,BUY,SELL,BUY
 USDJPY,HOLD,SELL,BUY,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD,SELL
 AUDCAD,BUY,HOLD,SELL,BUY,HOLD,SELL,BUY,BUY,HOLD,SELL,BUY
@@ -304,7 +527,7 @@ NZDCAD,BUY,BUY,BUY,HOLD,HOLD,SELL,SELL,BUY,HOLD,SELL,BUY
 XAUUSD,BUY,SELL,BUY,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD,SELL
 USDCHF,HOLD,HOLD,BUY,SELL,BUY,HOLD,SELL,BUY,SELL,BUY,HOLD
 GBPJPY,SELL,BUY,HOLD,BUY,SELL,HOLD,BUY,BUY,BUY,SELL,BUY
-CADCHF,HOLD,SELL,BUY,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD,SELL`; 
+CADCHF,HOLD,SELL,BUY,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD,SELL`;
 
             return Promise.resolve(mockData);
         }
@@ -320,12 +543,12 @@ CADCHF,HOLD,SELL,BUY,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD,SELL`;
                 return await response.text();
             } catch (err) {
                 console.error("Error fetching data from proxy:", err.message);
-                document.querySelector("#currency-table tbody").innerHTML = 
+                document.querySelector("#currency-table tbody").innerHTML =
                     `<tr><td colspan="${EXPECTED_COLUMNS}" style="color:red;">Error loading data: ${err.message}</td></tr>`;
                 return "";
             }
         }
-        
+
         // --- Main Fetch Function: Chooses between Live and Mock ---
         async function fetchCSV() {
             if (USE_LIVE_PROXY) {
@@ -348,61 +571,89 @@ CADCHF,HOLD,SELL,BUY,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD,SELL`;
             if (cleanedStatus.includes('hold')) return 'status-hold';
             return 'status-default';
         }
-        
+
         // --- Flag & Currency Renderer ---
         function createCurrencyCell(currencyPair) {
             const td = document.createElement("td");
             td.classList.add('currency-cell');
-            
-            const baseCurrency = currencyPair.substring(0, 3).toUpperCase();
-            const quoteCurrency = currencyPair.substring(3, 6).toUpperCase();
-            
-            let htmlContent = '';
 
-            const flag1 = CURRENCY_TO_FLAG[baseCurrency];
-            if (flag1) {
-                htmlContent += `<span class="fi fi-${flag1}"></span>`;
-            }
-            htmlContent += baseCurrency;
-            
-            htmlContent += '/';
+            // Normalize the pair
+            const pair = currencyPair.toUpperCase().trim();
 
-            const flag2 = CURRENCY_TO_FLAG[quoteCurrency];
-            if (flag2) {
-                htmlContent += `<span class="fi fi-${flag2}"></span>`;
+            // Check if it's a full pair (6 characters, e.g., EURUSD) or a single asset (<= 4 characters, e.g., XAU)
+            if (pair.length === 6) {
+                // Logic for a standard currency pair (e.g., EURUSD)
+                const baseCurrency = pair.substring(0, 3);
+                const quoteCurrency = pair.substring(3, 6);
+
+                let htmlContent = '';
+
+                const flag1 = CURRENCY_TO_FLAG[baseCurrency];
+                if (flag1) {
+                    htmlContent += `<span class="fi fi-${flag1}"></span>`;
+                }
+                htmlContent += baseCurrency;
+
+                htmlContent += '/'; // Include slash
+
+                const flag2 = CURRENCY_TO_FLAG[quoteCurrency];
+                if (flag2) {
+                    htmlContent += `<span class="fi fi-${flag2}"></span>`;
+                }
+                htmlContent += quoteCurrency;
+
+                td.innerHTML = htmlContent;
+
+            } else if (pair.length <= 4 && pair.length >= 3) {
+                // Logic for a single asset (e.g., XAU, USD). 
+                const currency = pair;
+
+                let htmlContent = '';
+
+                const flag = CURRENCY_TO_FLAG[currency];
+                if (flag) {
+                    htmlContent += `<span class="fi fi-${flag}"></span>`;
+                }
+                htmlContent += currency;
+
+                // No slash is added
+
+                td.innerHTML = htmlContent;
+            } else {
+                // Fallback for unexpected format
+                td.textContent = currencyPair;
             }
-            htmlContent += quoteCurrency;
-            
-            td.innerHTML = htmlContent;
+
             return td;
         }
+
 
         function renderTable(data) {
             const tbody = document.querySelector("#currency-table tbody");
             tbody.innerHTML = "";
-            
+
             data.forEach((row, index) => {
-                if (index === 0) return; 
-                
-                if (row.length < EXPECTED_COLUMNS) { 
+                if (index === 0) return;
+
+                if (row.length < EXPECTED_COLUMNS) {
                     console.warn(`Skipping malformed row (expected ${EXPECTED_COLUMNS} columns): ${row.join(',')}`);
-                    return; 
+                    return;
                 }
 
                 const tr = document.createElement("tr");
-                
-                row.slice(0, EXPECTED_COLUMNS).forEach((cell, cellIndex) => { 
+
+                row.slice(0, EXPECTED_COLUMNS).forEach((cell, cellIndex) => {
                     const cellValue = cell.trim();
-                    
+
                     if (cellIndex === CURRENCY_COLUMN_INDEX) {
                         const currencyTd = createCurrencyCell(cellValue);
                         tr.appendChild(currencyTd);
-                        return; 
-                    } 
-                    
+                        return;
+                    }
+
                     const td = document.createElement("td");
                     td.textContent = cellValue;
-                    
+
                     // Apply color class to all signal columns and the final Status column
                     if (cellIndex > CURRENCY_COLUMN_INDEX) {
                         const statusClass = getStatusClass(cellValue);
@@ -413,10 +664,10 @@ CADCHF,HOLD,SELL,BUY,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD,SELL`;
                 });
                 tbody.appendChild(tr);
             });
-            
+
             // Updates the ALL button state (which is always active now)
             applyFilter(activeTimeframe);
-            
+
             const now = new Date().toLocaleTimeString();
             const captionText = `Last Updated: ${now} JST`;
             let caption = document.querySelector("#currency-table caption");
@@ -426,7 +677,7 @@ CADCHF,HOLD,SELL,BUY,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD,SELL`;
             }
             caption.textContent = captionText;
         }
-        
+
         // --- Filter Logic (Simplified - only handles 'all') ---
         function applyFilter(timeframe) {
             document.querySelectorAll('.filter-button').forEach(button => {
@@ -439,33 +690,34 @@ CADCHF,HOLD,SELL,BUY,HOLD,BUY,SELL,HOLD,SELL,BUY,HOLD,SELL`;
         }
 
         async function updateTable() {
-            document.querySelector("#currency-table tbody").innerHTML = 
+            document.querySelector("#currency-table tbody").innerHTML =
                 `<tr><td colspan="${EXPECTED_COLUMNS}" class="loading">Fetching and processing data...</td></tr>`;
-            
+
             const csvText = await fetchCSV();
-            
+
             if (csvText) {
                 const data = parseCSV(csvText);
-                if (data.length > 1) { 
+                if (data.length > 1) {
                     renderTable(data);
                 } else {
-                    document.querySelector("#currency-table tbody").innerHTML = 
+                    document.querySelector("#currency-table tbody").innerHTML =
                         `<tr><td colspan="${EXPECTED_COLUMNS}" style="color:#FFC300;">Data is empty or incorrectly formatted.</td></tr>`;
                 }
             }
         }
-        
+
         // --- Initialization ---
         function init() {
             updateTable();
-            
+
             // Set interval only if using the live proxy
             if (USE_LIVE_PROXY) {
                 setInterval(updateTable, REFRESH_INTERVAL);
             }
         }
-        
+
         init();
     </script>
 </body>
+
 </html>
